@@ -7,6 +7,8 @@ import java.util.Objects;
 
 @Entity
 public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idItem;
     private String brand;
     private String model;
@@ -17,8 +19,11 @@ public class Item {
     private String serialNumber;
     private String description;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JoinColumn(name = "location", referencedColumnName = "idLocation")
+    @ManyToOne(optional = false)
+    private Location location;
+
+
     public Integer getIdItem() {
         return idItem;
     }
@@ -89,6 +94,15 @@ public class Item {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     @Override
