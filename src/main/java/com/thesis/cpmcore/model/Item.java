@@ -1,14 +1,17 @@
 package com.thesis.cpmcore.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+@Data
 @Entity
 public class Item {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer idItem;
     private String brand;
     private String model;
@@ -19,10 +22,18 @@ public class Item {
     private String serialNumber;
     private String description;
 
+
+
     @JoinColumn(name = "location", referencedColumnName = "idLocation")
     @ManyToOne(optional = false)
     private Location location;
 
+    @JoinColumn(name = "creationUser", referencedColumnName = "idUser")
+    @ManyToOne(optional = false)
+    private User creationUser;
+
+    public Item() {
+    }
 
     public Integer getIdItem() {
         return idItem;
@@ -103,6 +114,14 @@ public class Item {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public User getCreationUser() {
+        return creationUser;
+    }
+
+    public void setCreationUser(User creationUser) {
+        this.creationUser = creationUser;
     }
 
     @Override

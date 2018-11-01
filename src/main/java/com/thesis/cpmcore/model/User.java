@@ -11,10 +11,12 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long idUser;
+    private Integer idUser;
     private String username;
     private String password;
     private String email;
+
+
 
     @JoinColumn(name = "idRole", referencedColumnName = "idRole")
     @ManyToOne(optional = false)

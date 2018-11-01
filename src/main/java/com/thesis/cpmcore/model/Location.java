@@ -12,6 +12,9 @@ public class Location {
     private BigDecimal coordinateY;
     private String address;
 
+    public Location() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getIdLocation() {

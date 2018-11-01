@@ -11,6 +11,9 @@ public class Role {
     private Integer idRole;
     private String name;
 
+    public Role() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getIdRole() {
