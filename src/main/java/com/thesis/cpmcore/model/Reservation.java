@@ -1,19 +1,33 @@
 package com.thesis.cpmcore.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
-
+@Data
 @Entity
 public class Reservation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idReservation;
     private Timestamp from;
     private Timestamp to;
     private String reason;
     private String contact;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JoinColumn(name = "reserverUser", referencedColumnName = "idUser")
+    @ManyToOne(optional = false)
+    private User reserverUser;
+
+    @JoinColumn(name = "itemId", referencedColumnName = "idItem")
+    @ManyToOne(optional = false)
+    private Item itemId;
+
+    public Reservation(){
+
+    }
+
     public Integer getIdReservation() {
         return idReservation;
     }
@@ -56,6 +70,22 @@ public class Reservation {
 
     public void setContact(String contact) {
         this.contact = contact;
+    }
+
+    public User getReserverUser() {
+        return reserverUser;
+    }
+
+    public void setReserverUser(User reserverUser) {
+        this.reserverUser = reserverUser;
+    }
+
+    public Item getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Item itemId) {
+        this.itemId = itemId;
     }
 
     @Override
