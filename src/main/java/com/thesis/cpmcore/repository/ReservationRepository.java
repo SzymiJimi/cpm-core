@@ -1,5 +1,6 @@
 package com.thesis.cpmcore.repository;
 
+import com.thesis.cpmcore.model.Item;
 import com.thesis.cpmcore.model.Reservation;
 import com.thesis.cpmcore.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,6 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
 
     List<Reservation> findReservationsByReserverUser(User reserverUser);
+    List<Reservation> findReservationsByItemId(Item itemId);
 
 }

@@ -40,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/login").allowedOrigins("http://localhost:4200").allowCredentials(true);
                 registry.addMapping("/user").allowedOrigins("http://localhost:4200").allowCredentials(true);
+                registry.addMapping("/reservations").allowedOrigins("http://localhost:4200").allowCredentials(true);
                 registry.addMapping("/**").allowedOrigins("http://localhost:4200").allowCredentials(true);
             }
         };

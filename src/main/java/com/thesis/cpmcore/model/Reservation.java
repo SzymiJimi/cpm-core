@@ -9,9 +9,11 @@ import java.util.Objects;
 @Entity
 public class Reservation {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer idReservation;
+    @Column(name = "`from`")
     private Timestamp from;
+    @Column(name = "`to`")
     private Timestamp to;
     private String reason;
     private String contact;

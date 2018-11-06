@@ -13,7 +13,7 @@ public class Request {
     private Timestamp toDate;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     public Integer getIdRequest() {
         return idRequest;
     }
