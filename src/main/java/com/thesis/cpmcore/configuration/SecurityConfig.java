@@ -38,10 +38,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/login").allowedOrigins("http://localhost:4200").allowCredentials(true);
-                registry.addMapping("/user").allowedOrigins("http://localhost:4200").allowCredentials(true);
-                registry.addMapping("/reservations").allowedOrigins("http://localhost:4200").allowCredentials(true);
-                registry.addMapping("/**").allowedOrigins("http://localhost:4200").allowCredentials(true);
+                registry.addMapping("/login").allowedOrigins("http://192.168.0.54:4200" ).allowCredentials(true);
+                registry.addMapping("/user").allowedOrigins("http://192.168.0.54:4200").allowCredentials(true);
+                registry.addMapping("/reservations").allowedOrigins("http://192.168.0.54:4200").allowCredentials(true);
+                registry.addMapping("/checkout").allowedOrigins("http://192.168.0.54:4200").allowCredentials(true);
+                registry.addMapping("/**").allowedOrigins("http://192.168.0.54:4200").allowCredentials(true);
             }
         };
     }

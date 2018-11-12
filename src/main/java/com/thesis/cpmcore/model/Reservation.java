@@ -17,6 +17,7 @@ public class Reservation {
     private Timestamp to;
     private String reason;
     private String contact;
+    private String type;
 
     @JoinColumn(name = "reserverUser", referencedColumnName = "idUser")
     @ManyToOne(optional = false)
@@ -25,6 +26,9 @@ public class Reservation {
     @JoinColumn(name = "itemId", referencedColumnName = "idItem")
     @ManyToOne(optional = false)
     private Item itemId;
+
+    public static String RESERVATION = "RESERVATION";
+    public static String CHECK_OUT = "CHECK_OUT";
 
     public Reservation(){
 
@@ -88,6 +92,14 @@ public class Reservation {
 
     public void setItemId(Item itemId) {
         this.itemId = itemId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

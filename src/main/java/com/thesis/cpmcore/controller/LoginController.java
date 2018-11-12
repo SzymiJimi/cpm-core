@@ -17,7 +17,7 @@ public class LoginController {
     }
 
     @RequestMapping("/login")
-    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    @CrossOrigin(origins ={"http://192.168.0.54:4200", "http://localhost:4200"}, allowCredentials = "true")
     public boolean login(@RequestBody User user) {
         User foundUser  = userRepository.findByUsername(user.getUsername());
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();

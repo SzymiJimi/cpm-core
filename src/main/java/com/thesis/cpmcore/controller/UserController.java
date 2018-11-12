@@ -26,7 +26,8 @@ public class UserController {
     }
 
     @RequestMapping("/user")
-    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    @CrossOrigin(origins = {"http://192.168.0.54:4200", "http://localhost:4200"}, allowCredentials = "true")
+
     public ResponseEntity user(HttpServletRequest request) {
         String authToken = request.getHeader("Authorization")
                 .substring("Basic".length()).trim();

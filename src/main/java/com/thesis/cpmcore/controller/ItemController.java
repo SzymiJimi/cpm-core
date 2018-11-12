@@ -3,6 +3,8 @@ package com.thesis.cpmcore.controller;
 
 import com.thesis.cpmcore.model.Item;
 import com.thesis.cpmcore.repository.ItemRepository;
+import com.thesis.cpmcore.service.AvailabilityChecker;
+import com.thesis.cpmcore.service.impl.AvailabilityCheckerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,10 +19,12 @@ import java.util.List;
 public class ItemController {
 
     private ItemRepository itemRepository;
+    private AvailabilityChecker availabilityChecker;
 
     @Autowired
-    public ItemController(ItemRepository itemRepository){
+    public ItemController(ItemRepository itemRepository, AvailabilityCheckerImpl availabilityChecker){
         this.itemRepository = itemRepository;
+        this.availabilityChecker = availabilityChecker;
     }
 
     @RequestMapping(value = "/items", method = RequestMethod.GET)
@@ -59,5 +63,21 @@ public class ItemController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching data from database");
         }
     }
+
+    @RequestMapping(value = "/item/availability/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    public ResponseEntity availabilityOfItem(@PathVariable(value = "id")Integer id){
+        try{
+            if(availabilityChecker.checkAvailabilityOfItem(id)){
+                return ResponseEntity.status(HttpStatus.OK).body("Available");
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Not available");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Error with checking availability");
+        }
+    }
+
 
 }
