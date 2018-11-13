@@ -30,6 +30,14 @@ public class User {
 
     }
 
+    public Integer getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -52,6 +60,22 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Role getIdRole() {
+        return idRole;
+    }
+
+    public void setIdRole(Role idRole) {
+        this.idRole = idRole;
+    }
+
+    public Personaldata getIdPersonaldata() {
+        return idPersonaldata;
+    }
+
+    public void setIdPersonaldata(Personaldata idPersonaldata) {
+        this.idPersonaldata = idPersonaldata;
     }
 
     @Override

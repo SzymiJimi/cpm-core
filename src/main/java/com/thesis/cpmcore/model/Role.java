@@ -11,6 +11,10 @@ public class Role {
     private Integer idRole;
     private String name;
 
+    public static String MANAGER = "ROLE_MANAGER";
+    public static String USER = "ROLE_USER";
+    public static String HEAD = "ROLE_HEAD";
+
     public Role() {
     }
 
