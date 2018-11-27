@@ -1,10 +1,9 @@
 package com.thesis.cpmcore.service.impl;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.thesis.cpmcore.model.Item;
-import com.thesis.cpmcore.model.Reservation;
+import com.thesis.cpmcore.model.Action;
 import com.thesis.cpmcore.repository.ItemRepository;
-import com.thesis.cpmcore.repository.ReservationRepository;
+import com.thesis.cpmcore.repository.ActionRepository;
 import com.thesis.cpmcore.service.AvailabilityChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,13 +16,13 @@ import java.util.List;
 public class AvailabilityCheckerImpl implements AvailabilityChecker {
 
     private ItemRepository itemRepository;
-    private ReservationRepository reservationRepository;
-    private List<Reservation> reservationsForItem;
+    private ActionRepository actionRepository;
+    private List<Action> reservationsForItem;
 
     @Autowired
-    public AvailabilityCheckerImpl(ItemRepository itemRepository, ReservationRepository reservationRepository){
+    public AvailabilityCheckerImpl(ItemRepository itemRepository, ActionRepository actionRepository){
         this.itemRepository = itemRepository;
-        this.reservationRepository = reservationRepository;
+        this.actionRepository = actionRepository;
     }
 
     @Override
@@ -51,13 +50,13 @@ public class AvailabilityCheckerImpl implements AvailabilityChecker {
     }
 
     private void loadReservationsForItem(@NotNull Item item){
-        this.reservationsForItem = this.reservationRepository.findReservationsByItemId(item);
+        this.reservationsForItem = this.actionRepository.findReservationsByItemId(item);
     }
 
     private Boolean checkAvailability(){
         Date currentTime = new Date();
         Boolean available = true;
-        for (Reservation reservation: reservationsForItem) {
+        for (Action reservation: reservationsForItem) {
 //            System.out.println("Dzisiejszy dzien:" + currentTime.toString());
 //            System.out.println("From: " + reservation.getFrom().toString());
 //            System.out.println("To: " + reservation.getTo().toString());

@@ -2,15 +2,20 @@ package com.thesis.cpmcore.controller;
 
 
 import com.thesis.cpmcore.model.Item;
+import com.thesis.cpmcore.model.User;
 import com.thesis.cpmcore.repository.ItemRepository;
+import com.thesis.cpmcore.repository.UserRepository;
 import com.thesis.cpmcore.service.AvailabilityChecker;
+import com.thesis.cpmcore.service.ProfileUpdateService;
 import com.thesis.cpmcore.service.impl.AvailabilityCheckerImpl;
+import com.thesis.cpmcore.service.impl.ProfileUpdateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +25,18 @@ public class ItemController {
 
     private ItemRepository itemRepository;
     private AvailabilityChecker availabilityChecker;
+    private UserRepository userRepository;
+    private ProfileUpdateService profileUpdateService;
 
     @Autowired
-    public ItemController(ItemRepository itemRepository, AvailabilityCheckerImpl availabilityChecker){
+    public ItemController(ItemRepository itemRepository,
+                          AvailabilityCheckerImpl availabilityChecker,
+                          UserRepository userRepository,
+                          ProfileUpdateServiceImpl profileUpdateService){
         this.itemRepository = itemRepository;
         this.availabilityChecker = availabilityChecker;
+        this.userRepository = userRepository;
+        this.profileUpdateService = profileUpdateService;
     }
 
     @RequestMapping(value = "/items", method = RequestMethod.GET)

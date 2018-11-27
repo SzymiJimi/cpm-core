@@ -1,11 +1,10 @@
 package com.thesis.cpmcore.controller;
 
-import com.thesis.cpmcore.model.Reservation;
-import com.thesis.cpmcore.model.User;
+import com.thesis.cpmcore.model.Action;
 import com.thesis.cpmcore.repository.ItemRepository;
-import com.thesis.cpmcore.repository.ReservationRepository;
+import com.thesis.cpmcore.repository.ActionRepository;
 import com.thesis.cpmcore.repository.UserRepository;
-import com.thesis.cpmcore.service.ReservationService;
+import com.thesis.cpmcore.service.ActionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,29 +16,29 @@ import java.util.List;
 @CrossOrigin
 public class CheckOutController {
 
-    private ReservationRepository reservationRepository;
+    private ActionRepository actionRepository;
     private UserRepository userRepository;
     private ItemRepository itemRepository;
-    private ReservationService reservationService;
+    private ActionService actionService;
 
     @Autowired
-    public CheckOutController(ReservationRepository reservationRepository,
-                                 UserRepository userRepository,
-                                 ItemRepository itemRepository,
-                                ReservationService reservationService){
-        this.reservationRepository = reservationRepository;
+    public CheckOutController(ActionRepository actionRepository,
+                              UserRepository userRepository,
+                              ItemRepository itemRepository,
+                              ActionService actionService){
+        this.actionRepository = actionRepository;
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
-        this.reservationService = reservationService;
+        this.actionService = actionService;
     }
 
 
     @RequestMapping(value = "/checkout/new", method = RequestMethod.POST)
     @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
-    public ResponseEntity addNewCheckOut(@RequestBody Reservation reservation){
+    public ResponseEntity addNewCheckOut(@RequestBody Action reservation){
         try{
-            reservation.setType(Reservation.CHECK_OUT);
-            reservationRepository.save(reservation);
+            reservation.setType(Action.CHECK_OUT);
+            actionRepository.save(reservation);
             return ResponseEntity.status(HttpStatus.OK).body("Accepted");
         }catch(Exception e){
             e.printStackTrace();
@@ -52,7 +51,7 @@ public class CheckOutController {
     public ResponseEntity findCheckOutsForItem(@PathVariable(value = "id") Integer idItem){
         try{
             System.out.println("Wchodzi prośba");
-            List<Reservation> reservations = this.reservationService.findReservationsForItem(idItem, Reservation.CHECK_OUT);
+            List<Action> reservations = this.actionService.findReservationsForItem(idItem, Action.CHECK_OUT);
             return ResponseEntity.status(HttpStatus.OK).body(reservations);
         }catch(Exception e){
             e.printStackTrace();
@@ -64,7 +63,7 @@ public class CheckOutController {
     @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
     public ResponseEntity getItemList(@PathVariable(value = "id") Integer idUser){
         try{
-            List<Reservation> reservations = this.reservationService.findReservationsForUser(idUser, Reservation.CHECK_OUT);
+            List<Action> reservations = this.actionService.findReservationsForUser(idUser, Action.CHECK_OUT);
             return ResponseEntity.status(HttpStatus.OK).body(reservations);
         }catch(Exception e){
             e.printStackTrace();

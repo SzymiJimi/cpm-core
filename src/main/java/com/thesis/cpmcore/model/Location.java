@@ -8,8 +8,6 @@ import java.util.Objects;
 public class Location {
     private Integer idLocation;
     private String name;
-    private BigDecimal coordinateX;
-    private BigDecimal coordinateY;
     private String address;
 
     public Location() {
@@ -33,22 +31,6 @@ public class Location {
         this.name = name;
     }
 
-    public BigDecimal getCoordinateX() {
-        return coordinateX;
-    }
-
-    public void setCoordinateX(BigDecimal coordinateX) {
-        this.coordinateX = coordinateX;
-    }
-
-    public BigDecimal getCoordinateY() {
-        return coordinateY;
-    }
-
-    public void setCoordinateY(BigDecimal coordinateY) {
-        this.coordinateY = coordinateY;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -64,14 +46,12 @@ public class Location {
         Location location = (Location) o;
         return Objects.equals(idLocation, location.idLocation) &&
                 Objects.equals(name, location.name) &&
-                Objects.equals(coordinateX, location.coordinateX) &&
-                Objects.equals(coordinateY, location.coordinateY) &&
                 Objects.equals(address, location.address);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(idLocation, name, coordinateX, coordinateY, address);
+        return Objects.hash(idLocation, name, address);
     }
 }

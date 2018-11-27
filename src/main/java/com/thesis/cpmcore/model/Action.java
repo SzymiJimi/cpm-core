@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 @Data
 @Entity
-public class Reservation {
+public class Action {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer idReservation;
@@ -30,7 +30,7 @@ public class Reservation {
     public static String RESERVATION = "RESERVATION";
     public static String CHECK_OUT = "CHECK_OUT";
 
-    public Reservation(){
+    public Action(){
 
     }
 
@@ -103,20 +103,29 @@ public class Reservation {
     }
 
     @Override
+    public String toString() {
+        return "Action{" +
+                "idReservation=" + idReservation +
+                ", from=" + from +
+                ", to=" + to +
+                ", reason='" + reason + '\'' +
+                ", contact='" + contact + '\'' +
+                ", type='" + type + '\'' +
+                ", reserverUser=" + reserverUser +
+                ", itemId=" + itemId +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Reservation that = (Reservation) o;
-        return Objects.equals(idReservation, that.idReservation) &&
-                Objects.equals(from, that.from) &&
-                Objects.equals(to, that.to) &&
-                Objects.equals(reason, that.reason) &&
-                Objects.equals(contact, that.contact);
+        Action action = (Action) o;
+        return Objects.equals(idReservation, action.idReservation);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(idReservation, from, to, reason, contact);
+        return Objects.hash(idReservation);
     }
 }
