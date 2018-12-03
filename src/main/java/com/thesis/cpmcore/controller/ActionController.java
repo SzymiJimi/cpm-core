@@ -10,7 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.Path;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -79,12 +84,55 @@ public class ActionController {
         }
     }
 
-    @RequestMapping(value = "/reservation/get/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/action/get/{id}", method = RequestMethod.GET)
     @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
     public ResponseEntity getSingleReservation(@PathVariable(value = "id") Integer idReservation){
         try{
-            Action reservation = this.actionRepository.findReservationByIdReservationAndType(idReservation, Action.RESERVATION);
+            Action reservation = this.actionRepository.findReservationByIdReservation(idReservation);
             return ResponseEntity.status(HttpStatus.OK).body(reservation);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching data from database");
+        }
+    }
+
+
+    @RequestMapping(value = "/action/finish", method = RequestMethod.POST)
+    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    public ResponseEntity finishAction(@RequestBody Action action){
+        try{
+            action.setTo(new Timestamp(Calendar.getInstance().getTimeInMillis()+3600000));
+            if(action.getTo().before(action.getFrom())){
+                action.setFrom(new Timestamp(Calendar.getInstance().getTimeInMillis()+3600000));
+            }
+            Action newAction = this.actionRepository.save(action);
+            return ResponseEntity.status(HttpStatus.OK).body(newAction);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching data from database");
+        }
+    }
+
+
+    @RequestMapping(value = "/actions/{period}/user/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    public ResponseEntity getActionsForUser(@PathVariable(value = "id") Integer idUser, @PathVariable(value = "period") String period){
+        try{
+            List<Action> reservations;
+            if(period.equals("before")){
+                reservations = this.actionRepository
+                        .findReservationsByReserverUserIdUser(idUser)
+                        .stream()
+                        .filter(entry -> entry.getTo().before(new Timestamp(Calendar.getInstance().getTimeInMillis()+3600000)))
+                        .collect(Collectors.toList());
+            }else{
+                reservations = this.actionRepository
+                        .findReservationsByReserverUserIdUser(idUser)
+                        .stream()
+                        .filter(entry -> entry.getTo().after(new Timestamp(Calendar.getInstance().getTimeInMillis()+3600000)))
+                        .collect(Collectors.toList());
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(reservations);
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching data from database");

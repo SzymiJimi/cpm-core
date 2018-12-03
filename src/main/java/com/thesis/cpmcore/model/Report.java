@@ -25,6 +25,10 @@ public class Report {
     @ManyToOne(optional = false)
     private User declarant;
 
+    @JoinColumn(name = "serviceman", referencedColumnName = "idUser")
+    @ManyToOne(optional = false)
+    private User serviceman;
+
     public Report() {
     }
 
@@ -96,6 +100,14 @@ public class Report {
 
     public void setDeclarant(User declarant) {
         this.declarant = declarant;
+    }
+
+    public User getServiceman() {
+        return serviceman;
+    }
+
+    public void setServiceman(User serviceman) {
+        this.serviceman = serviceman;
     }
 
     @Override
