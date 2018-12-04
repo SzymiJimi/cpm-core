@@ -49,10 +49,8 @@ public class StocktakingController {
     @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
     public ResponseEntity startNewStocktaking(@RequestBody() Stocktaking stocktaking){
         try{
-            System.out.println("Weszło");
             stocktaking.setStart(Timestamp.valueOf(LocalDateTime.now()));
             Stocktaking stocktakingResult =  this.stocktakingRepository.save(stocktaking);
-            System.out.println("Teoretycznie zapisało: "+ stocktakingResult.toString());
             this.stocktakingService.startStocktaking(stocktakingResult);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Success");
         }catch(Exception e){
@@ -85,5 +83,18 @@ public class StocktakingController {
         }
     }
 
+
+    @RequestMapping(value = "/stocktaking/finish", method = RequestMethod.POST)
+    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    public ResponseEntity getStocktaking(@RequestBody Stocktaking stocktaking){
+        try{
+            stocktaking.setFinish(Timestamp.valueOf(LocalDateTime.now()));
+            Stocktaking saved = this.stocktakingRepository.save(stocktaking);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(saved);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching last date");
+        }
+    }
 
 }

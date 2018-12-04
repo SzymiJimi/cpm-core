@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -30,6 +31,19 @@ public class SheetController {
             Stocktaking stocktaking = stocktakingRepository.findById(idStocktaking).orElse(new Stocktaking());
             List<Sheet> stocktakings = this.sheetRepository.findByIdStocktaking(stocktaking);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(stocktakings);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching last date");
+        }
+    }
+
+
+    @RequestMapping(value = "/sheet/save/state", method = RequestMethod.POST)
+    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    public ResponseEntity saveSheetsActualState(@RequestBody List<Sheet> sheets){
+        try{
+            List<Sheet> savedSheets = sheets.stream().map(sheet-> this.sheetRepository.save(sheet)).collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(savedSheets);
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching last date");
