@@ -57,11 +57,6 @@ public class AvailabilityCheckerImpl implements AvailabilityChecker {
         Date currentTime = new Date();
         Boolean available = true;
         for (Action reservation: reservationsForItem) {
-//            System.out.println("Dzisiejszy dzien:" + currentTime.toString());
-//            System.out.println("From: " + reservation.getFrom().toString());
-//            System.out.println("To: " + reservation.getTo().toString());
-//            System.out.println("Czy from jest przed: " + reservation.getFrom().before(currentTime) );
-//            System.out.println("Czy to jest za: " + reservation.getTo().after(currentTime) );
             if(reservation.getFrom().before(currentTime)&& reservation.getTo().after(currentTime)){
                 available = false;
             }

@@ -16,8 +16,6 @@ public class User {
     private String password;
     private String email;
 
-
-
     @JoinColumn(name = "idRole", referencedColumnName = "idRole")
     @ManyToOne(optional = false)
     private Role idRole;

@@ -1,20 +1,27 @@
 package com.thesis.cpmcore.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Objects;
 
+@Data
 @Entity
 public class Location {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idLocation;
     private String name;
     private String address;
 
+    @JoinColumn(name = "unitHead", referencedColumnName = "idUser")
+    @ManyToOne(optional = false)
+    private User unitHead;
+
     public Location() {
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     public Integer getIdLocation() {
         return idLocation;
     }
@@ -37,6 +44,14 @@ public class Location {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public User getUnitHead() {
+        return unitHead;
+    }
+
+    public void setUnitHead(User unitHead) {
+        this.unitHead = unitHead;
     }
 
     @Override

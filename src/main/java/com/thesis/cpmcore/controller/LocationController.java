@@ -53,7 +53,7 @@ public class LocationController {
     public ResponseEntity updateLocation(@RequestBody Location location){
         try{
             this.locationRepository.save(location);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Success");
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Success with save");
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching location from db");
@@ -67,7 +67,7 @@ public class LocationController {
     public ResponseEntity addNewLocation(@RequestBody Location newLocation){
         try{
             this.locationRepository.save(newLocation);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Success");
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Success with update");
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching location from db");
@@ -86,7 +86,20 @@ public class LocationController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching location from db");
         }
-
     }
+
+    @RequestMapping(value = "/location/find/manager/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    public ResponseEntity findLocationForInventoryManager(@PathVariable(value="id") Integer id){
+        try{
+           Location location = this.locationRepository.findByUnitHeadIdUser(id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(location);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching location from db");
+        }
+    }
+
+
 
 }

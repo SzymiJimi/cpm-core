@@ -55,7 +55,6 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     @Override
     public void updateRole(User user) {
         Role role = this.roleRepository.findByName(user.getIdRole().getName());
-        System.out.println("Znaleziona rola: " + role.toString());
         user.setIdRole(role);
         this.userRepository.save(user);
     }
