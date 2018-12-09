@@ -30,6 +30,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private boolean chechPermissionForReportChange(User user){
-        return user.getIdRole().getName().equals(Role.MANAGER);
+        return user.getIdRole().getName().equals(Role.SERVICE);
     }
 }

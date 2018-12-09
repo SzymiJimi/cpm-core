@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -116,6 +113,24 @@ public class ReportController {
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with finishing report!");
+        }
+    }
+
+    @RequestMapping(value = "/reports", method = RequestMethod.GET)
+    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    public ResponseEntity getAllReports(){
+        try{
+            List<Report> reports = this.reportRepository.findAll();
+            reports.forEach(report -> {
+                String desc =  report.getDescription().split("//")[0];
+                report.setDescription(desc);
+            });
+            Collections.sort(reports);
+            
+            return ResponseEntity.status(HttpStatus.OK).body(reports);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching data from database");
         }
     }
 

@@ -1,13 +1,14 @@
 package com.thesis.cpmcore.model;
 
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 @Data
 @Entity
-public class Report {
+public class Report implements Comparable<Report> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer idRequest;
@@ -37,6 +38,10 @@ public class Report {
     public static String CREATED = "CREATED";
     public static String REPAIRING = "REPAIRING";
     public static String FINISHED = "FINISHED";
+    public static String DECOMMISSIONING = "DECOMMISSIONING";
+    public static String DECOMMISSIONED = "DECOMMISSIONED";
+    public static String REPAIRED = "REPAIRED";
+    public static String CHECKED = "CHECKED";
 
     public Integer getIdRequest() {
         return idRequest;
@@ -108,6 +113,11 @@ public class Report {
 
     public void setServiceman(User serviceman) {
         this.serviceman = serviceman;
+    }
+
+    @Override
+    public int compareTo(@NotNull Report o) {
+        return getEventDate().compareTo(o.getEventDate());
     }
 
     @Override

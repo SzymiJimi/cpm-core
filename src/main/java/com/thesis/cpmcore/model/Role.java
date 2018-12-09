@@ -14,6 +14,7 @@ public class Role {
     public static String MANAGER = "ROLE_MANAGER";
     public static String USER = "ROLE_USER";
     public static String HEAD = "ROLE_HEAD";
+    public static String SERVICE = "ROLE_SERVICEMAN";
 
     public Role() {
     }

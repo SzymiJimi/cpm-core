@@ -6,8 +6,10 @@ import com.thesis.cpmcore.model.User;
 import com.thesis.cpmcore.repository.ItemRepository;
 import com.thesis.cpmcore.repository.UserRepository;
 import com.thesis.cpmcore.service.AvailabilityChecker;
+import com.thesis.cpmcore.service.ItemService;
 import com.thesis.cpmcore.service.ProfileUpdateService;
 import com.thesis.cpmcore.service.impl.AvailabilityCheckerImpl;
+import com.thesis.cpmcore.service.impl.ItemServiceImpl;
 import com.thesis.cpmcore.service.impl.ProfileUpdateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,18 +27,15 @@ public class ItemController {
 
     private ItemRepository itemRepository;
     private AvailabilityChecker availabilityChecker;
-    private UserRepository userRepository;
-    private ProfileUpdateService profileUpdateService;
+    private ItemService itemService;
 
     @Autowired
     public ItemController(ItemRepository itemRepository,
                           AvailabilityCheckerImpl availabilityChecker,
-                          UserRepository userRepository,
-                          ProfileUpdateServiceImpl profileUpdateService){
+                          ItemServiceImpl itemService){
         this.itemRepository = itemRepository;
         this.availabilityChecker = availabilityChecker;
-        this.userRepository = userRepository;
-        this.profileUpdateService = profileUpdateService;
+        this.itemService = itemService;
     }
 
     @RequestMapping(value = "/items", method = RequestMethod.GET)
@@ -44,6 +43,7 @@ public class ItemController {
     public ResponseEntity getItemList(){
         try{
             List<Item> items = this.itemRepository.findAll();
+            items = itemService.checkItemsLocation(items);
             return ResponseEntity.status(HttpStatus.OK).body(items);
         }catch(Exception e){
             e.printStackTrace();

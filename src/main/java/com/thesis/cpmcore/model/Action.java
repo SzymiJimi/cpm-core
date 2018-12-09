@@ -27,6 +27,10 @@ public class Action {
     @ManyToOne(optional = false)
     private Item itemId;
 
+    @JoinColumn(name = "location", referencedColumnName = "idLocation")
+    @ManyToOne(optional = false)
+    private Location location;
+
     public static String RESERVATION = "RESERVATION";
     public static String CHECK_OUT = "CHECK_OUT";
 
@@ -100,6 +104,14 @@ public class Action {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     @Override

@@ -24,6 +24,7 @@ public class User {
     @ManyToOne(optional = false)
     private Personaldata idPersonaldata;
 
+
     public User(){
 
     }
@@ -75,6 +76,7 @@ public class User {
     public void setIdPersonaldata(Personaldata idPersonaldata) {
         this.idPersonaldata = idPersonaldata;
     }
+
 
     @Override
     public boolean equals(Object o) {
