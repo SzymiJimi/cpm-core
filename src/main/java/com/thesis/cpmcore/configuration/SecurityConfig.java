@@ -42,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 registry.addMapping("/user").allowedOrigins("http://192.168.0.54:4200").allowCredentials(true);
                 registry.addMapping("/reservations").allowedOrigins("http://192.168.0.54:4200").allowCredentials(true);
                 registry.addMapping("/checkout").allowedOrigins("http://192.168.0.54:4200").allowCredentials(true);
+                registry.addMapping("/register/new").allowedOrigins("http://192.168.0.54:4200").allowCredentials(false);
                 registry.addMapping("/**").allowedOrigins("http://192.168.0.54:4200").allowCredentials(true);
             }
         };
@@ -64,6 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/register/new").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
