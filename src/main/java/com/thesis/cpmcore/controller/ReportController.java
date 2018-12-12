@@ -88,7 +88,7 @@ public class ReportController {
             User repairMan = reportService.getAndCheckUser(request);
             Report report = this.reportRepository.findByIdRequest(id);
             if(repairMan!=null && report!=null){
-                report.setStatus(Report.REPAIRING);
+                report.setStatus(Report.REPAIRING);l
                 report.setServiceman(repairMan);
                 this.reportRepository.save(report);
                 return ResponseEntity.status(HttpStatus.OK).body(report);
