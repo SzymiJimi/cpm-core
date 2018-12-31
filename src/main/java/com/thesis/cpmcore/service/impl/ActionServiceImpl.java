@@ -10,6 +10,8 @@ import com.thesis.cpmcore.service.ActionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -45,5 +47,14 @@ public class ActionServiceImpl implements ActionService {
     public List<Action> findReservationsForUser(Integer idUser, String type) {
         User loggedUser = userRepository.findById(idUser).get();
         return this.actionRepository.findReservationsByReserverUserAndType(loggedUser, type);
+    }
+
+    @Override
+    public Boolean checkActionDates(Action action) {
+        if(action.getTo().before(action.getFrom())){
+            return false;
+        }else {
+            return !action.getTo().before(new Timestamp(Calendar.getInstance().getTimeInMillis() + 3600000));
+        }
     }
 }

@@ -21,6 +21,7 @@ public class Item {
     private Timestamp warrantyDate;
     private String serialNumber;
     private String description;
+    private Integer active;
 
 
 
@@ -107,6 +108,13 @@ public class Item {
         this.description = description;
     }
 
+    public Integer getActive() {
+        return active;
+    }
+
+    public void setActive(Integer active) {
+        this.active = active;
+    }
 
     public Location getLocation() {
         return location;

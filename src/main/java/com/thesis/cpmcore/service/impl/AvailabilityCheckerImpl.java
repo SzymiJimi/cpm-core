@@ -31,10 +31,8 @@ public class AvailabilityCheckerImpl implements AvailabilityChecker {
             Item item = getItemFromDb(id);
             loadReservationsForItem(item);
             if(checkAvailability()){
-                System.out.println("Dostepny");
                 return true;
             }else{
-                System.out.println("Niedostepny");
                 return false;
             }
 

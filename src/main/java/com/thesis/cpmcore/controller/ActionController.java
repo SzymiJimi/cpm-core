@@ -1,15 +1,19 @@
 package com.thesis.cpmcore.controller;
 
 import com.thesis.cpmcore.model.Action;
+import com.thesis.cpmcore.model.User;
 import com.thesis.cpmcore.repository.ActionRepository;
 import com.thesis.cpmcore.repository.UserRepository;
 import com.thesis.cpmcore.service.ActionService;
+import com.thesis.cpmcore.service.ProfileUpdateService;
 import com.thesis.cpmcore.service.impl.ActionServiceImpl;
+import com.thesis.cpmcore.service.impl.ProfileUpdateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -23,15 +27,17 @@ public class ActionController {
 
     private ActionRepository actionRepository;
     private UserRepository userRepository;
-//    private ItemRepository itemRepository;
+    private ProfileUpdateService profileUpdateService;
     private ActionService actionService;
 
     @Autowired
     public ActionController(ActionRepository actionRepository,
                             UserRepository userRepository,
+                            ProfileUpdateServiceImpl profileUpdateService,
                             ActionServiceImpl reservationService){
         this.actionRepository = actionRepository;
         this.userRepository = userRepository;
+        this.profileUpdateService = profileUpdateService;
         this.actionService = reservationService;
     }
 
@@ -52,8 +58,12 @@ public class ActionController {
     public ResponseEntity addNewReservation(@RequestBody Action reservation){
         try{
             reservation.setType(Action.RESERVATION);
-            actionRepository.save(reservation);
-            return ResponseEntity.status(HttpStatus.OK).body("Accepted");
+            if(this.actionService.checkActionDates(reservation)) {
+                actionRepository.save(reservation);
+                return ResponseEntity.status(HttpStatus.OK).body("Accepted");
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong dates from and to");
+            }
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching data from database");
@@ -133,6 +143,89 @@ public class ActionController {
                         .collect(Collectors.toList());
             }
             return ResponseEntity.status(HttpStatus.OK).body(reservations);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching data from database");
+        }
+    }
+
+
+    @RequestMapping(value = "/orders/get/active/amount/user/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    public ResponseEntity getActiveActionsForUser(@PathVariable(value = "id") Integer idUser, HttpServletRequest request){
+        try{
+            if (this.profileUpdateService.compareProfiles(this.userRepository.findById(idUser).orElse(new User()), request)) {
+                List<Action> reservations;
+                reservations = this.actionRepository
+                        .findReservationsByReserverUserAndType(this.userRepository.findById(idUser).orElse(new User()), Action.RESERVATION)
+                        .stream()
+                        .filter(entry -> entry.getTo().after(new Timestamp(Calendar.getInstance().getTimeInMillis() + 3600000)))
+                        .collect(Collectors.toList());
+                return ResponseEntity.status(HttpStatus.OK).body(reservations);
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with user access");
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching data from database");
+        }
+    }
+
+    @RequestMapping(value = "/orders/get/prev/amount/user/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    public ResponseEntity getPreviousActionsForUser(@PathVariable(value = "id") Integer idUser, HttpServletRequest request){
+        try{
+            if (this.profileUpdateService.compareProfiles(this.userRepository.findById(idUser).orElse(new User()), request)){
+                List<Action> reservations;
+                reservations = this.actionRepository
+                        .findReservationsByReserverUserAndType(this.userRepository.findById(idUser).orElse(new User()), Action.RESERVATION)
+                        .stream()
+                        .filter(entry -> entry.getTo().before(new Timestamp(Calendar.getInstance().getTimeInMillis()+3600000)))
+                        .collect(Collectors.toList());
+                return ResponseEntity.status(HttpStatus.OK).body(reservations);
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with user access");
+
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching data from database");
+        }
+    }
+
+    @RequestMapping(value = "/checkout/get/active/amount/user/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    public ResponseEntity getActiveCheckOutForUser(@PathVariable(value = "id") Integer idUser, HttpServletRequest request){
+        try{
+            if (this.profileUpdateService.compareProfiles(this.userRepository.findById(idUser).orElse(new User()), request)) {
+                List<Action> reservations;
+                reservations = this.actionRepository
+                        .findReservationsByReserverUserAndType(this.userRepository.findById(idUser).orElse(new User()), Action.CHECK_OUT)
+                        .stream()
+                        .filter(entry -> entry.getTo().after(new Timestamp(Calendar.getInstance().getTimeInMillis() + 3600000)))
+                        .collect(Collectors.toList());
+                return ResponseEntity.status(HttpStatus.OK).body(reservations);
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with user access");
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching data from database");
+        }
+    }
+
+    @RequestMapping(value = "/checkout/get/prev/amount/user/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    public ResponseEntity getPreviousCheckOutForUser(@PathVariable(value = "id") Integer idUser, HttpServletRequest request){
+        try{
+            if (this.profileUpdateService.compareProfiles(this.userRepository.findById(idUser).orElse(new User()), request)){
+                List<Action> reservations;
+                reservations = this.actionRepository
+                        .findReservationsByReserverUserAndType(this.userRepository.findById(idUser).orElse(new User()), Action.CHECK_OUT)
+                        .stream()
+                        .filter(entry -> entry.getTo().before(new Timestamp(Calendar.getInstance().getTimeInMillis()+3600000)))
+                        .collect(Collectors.toList());
+                return ResponseEntity.status(HttpStatus.OK).body(reservations);
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with user access");
+
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching data from database");

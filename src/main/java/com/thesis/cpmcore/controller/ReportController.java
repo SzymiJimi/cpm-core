@@ -71,9 +71,7 @@ public class ReportController {
     @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
     public ResponseEntity getUserReports(@PathVariable(value = "id") Integer id,  HttpServletRequest request){
         try{
-            System.out.println("Otrzymane id: " + id);
             Report report = this.reportRepository.findByIdRequest(id);
-            System.out.println("Report: " + report.toString());
             return ResponseEntity.status(HttpStatus.OK).body(report);
         }catch(Exception e){
             e.printStackTrace();
@@ -88,7 +86,7 @@ public class ReportController {
             User repairMan = reportService.getAndCheckUser(request);
             Report report = this.reportRepository.findByIdRequest(id);
             if(repairMan!=null && report!=null){
-                report.setStatus(Report.REPAIRING);l
+                report.setStatus(Report.REPAIRING);
                 report.setServiceman(repairMan);
                 this.reportRepository.save(report);
                 return ResponseEntity.status(HttpStatus.OK).body(report);

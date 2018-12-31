@@ -2,9 +2,13 @@ package com.thesis.cpmcore.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,11 +31,16 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableSpringConfigured
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@PropertySource("classpath:application.properties")
+@ComponentScan(basePackages = {"com.thesis.cpmcore"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private Environment env;
 
     @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
+
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -57,6 +66,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return manager1;
     }
 
+//   @Bean
+//    public DataSource dataSource() {
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+//        dataSource.setUrl(env.getProperty("spring.datasource.url"));
+//        dataSource.setUsername(env.getProperty("spring.datasource.username"));
+//        dataSource.setPassword(env.getProperty("spring.datasource.password"));
+//        return dataSource;
+//    }
 
 
     @Override
@@ -75,7 +93,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
         auth
                 .jdbcAuthentication()
                 .dataSource(dataSource)

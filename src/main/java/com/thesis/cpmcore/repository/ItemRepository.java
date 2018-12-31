@@ -11,5 +11,6 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
     List<Item> findAllByLocation(Location location);
-
+    List<Item> findAllByBrand(String brand);
+    void deleteAllByBrand(String brand);
 }

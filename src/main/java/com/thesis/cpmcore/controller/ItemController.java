@@ -68,7 +68,10 @@ public class ItemController {
     @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
     public ResponseEntity addNewItem(@RequestBody Item item){
         try{
-            itemRepository.save(item);
+            System.out.println("Dodaje nowego itemka brand: "+ item.getBrand());
+            Item saved = itemRepository.save(item);
+            System.out.println("Zapisany itemek, brand: "+ saved.getBrand());
+            System.out.println("Ilosc itemow testowych: " + itemRepository.findAllByBrand("TEST").size());
             return ResponseEntity.status(HttpStatus.OK).body("Success");
         }catch(Exception e){
             e.printStackTrace();
@@ -90,6 +93,21 @@ public class ItemController {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Error with checking availability");
         }
     }
+
+    @RequestMapping(value = "/item/disable/{id}", method = RequestMethod.GET)
+    @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+    public ResponseEntity disableItem(@PathVariable(value = "id")Integer id){
+        try{
+            Item item = this.itemRepository.findById(id).orElse(new Item());
+            item.setActive(0);
+            this.itemRepository.save(item);
+            return ResponseEntity.status(HttpStatus.OK).body(item);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching data from database");
+        }
+    }
+
 
 
 }

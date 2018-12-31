@@ -52,7 +52,7 @@ public class StocktakingController {
             stocktaking.setStart(Timestamp.valueOf(LocalDateTime.now()));
             Stocktaking stocktakingResult =  this.stocktakingRepository.save(stocktaking);
             this.stocktakingService.startStocktaking(stocktakingResult);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Success");
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(stocktakingResult.getIdSocktaking());
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error with fetching last date");

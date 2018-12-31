@@ -44,10 +44,8 @@ public class PersonaldataController {
     @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
     public ResponseEntity updateOtherProfile(@RequestBody User user, HttpServletRequest request){
         try{
-            System.out.println("Updejtuje role");
             if(this.profileUpdateService.checkPermission(request)){
                 this.profileUpdateService.updateRole(user);
-                System.out.println("Poszlo ok");
                 return ResponseEntity.status(HttpStatus.OK).body("Success");
             }else{
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You don't have permission to change other user role.");
